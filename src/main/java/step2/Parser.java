@@ -16,9 +16,9 @@ import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 
 public class Parser {
 	
-	public static final String projectPath = "C:\\Users\\zakarea.alshara\\osgi_workspace\\projectToParse";
-	public static final String projectSourcePath = projectPath + "\\src";
-	public static final String jrePath = "C:\\Program Files\\Java\\jre1.8.0_51\\lib\\rt.jar";
+	public static final String projectPath = "/Users/florianlachieze/Desktop/coursM2/évo L/TP1/visitorDesignPatternDemo";
+	public static final String projectSourcePath = projectPath + "/src";
+	public static final String jrePath = "/Library/Java/JavaVirtualMachines/jdk-23.jdk/Contents/Home";
 
 	public static void main(String[] args) throws IOException {
 

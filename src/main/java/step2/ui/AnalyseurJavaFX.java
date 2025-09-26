@@ -1,4 +1,4 @@
-package step2;
+package step2.ui;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -8,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import step2.core.AnalyseurProjet;
+import step2.core.StatistiquesProjet;
 
 import java.io.File;
 
@@ -17,7 +19,6 @@ public class AnalyseurJavaFX extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Analyseur de projet Java");
 
-        // Zone centrale
         Label instruction = new Label("Veuillez choisir le projet Java à analyser :");
         TextField cheminProjet = new TextField();
         cheminProjet.setEditable(false);
@@ -27,12 +28,11 @@ public class AnalyseurJavaFX extends Application {
         centerBox.setAlignment(Pos.CENTER);
         centerBox.setPadding(new Insets(20));
 
-        // Zone inférieure avec boutons
-        Button suivantBtn = new Button("Suivant");
-        suivantBtn.setDisable(true); // désactivé tant qu'aucun projet n'est choisi
+        Button analyserBtn = new Button("Analyser");
+        analyserBtn.setDisable(true);
         Button quitterBtn = new Button("Quitter");
 
-        HBox buttonBox = new HBox(10, suivantBtn, quitterBtn);
+        HBox buttonBox = new HBox(10, analyserBtn, quitterBtn);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
         buttonBox.setPadding(new Insets(10));
 
@@ -40,22 +40,27 @@ public class AnalyseurJavaFX extends Application {
         root.setCenter(centerBox);
         root.setBottom(buttonBox);
 
-        // Actions
+        final File[] projetChoisi = {null};
+
         parcourirBtn.setOnAction(e -> {
             DirectoryChooser chooser = new DirectoryChooser();
             chooser.setTitle("Sélectionner le projet Java");
             File selectedDirectory = chooser.showDialog(primaryStage);
             if (selectedDirectory != null) {
                 cheminProjet.setText(selectedDirectory.getAbsolutePath());
-                suivantBtn.setDisable(false); // active le bouton suivant
+                projetChoisi[0] = selectedDirectory;
+                analyserBtn.setDisable(false);
             }
         });
 
         quitterBtn.setOnAction(e -> primaryStage.close());
 
-        suivantBtn.setOnAction(e -> {
-            // Ici on pourrait lancer l'analyse du projet avec Spoon
-            System.out.println("Projet à analyser : " + cheminProjet.getText());
+        analyserBtn.setOnAction(e -> {
+            AnalyseurProjet analyseur = new AnalyseurProjet();
+            StatistiquesProjet stats = analyseur.analyser(projetChoisi[0]);
+
+            // On passe la fenêtre principale ET les stats
+            ResultatsView.afficher(primaryStage, stats);
         });
 
         Scene scene = new Scene(root, 600, 250);

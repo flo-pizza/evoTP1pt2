@@ -59,8 +59,11 @@ public class AnalyseurJavaFX extends Application {
             AnalyseurProjet analyseur = new AnalyseurProjet();
             StatistiquesProjet stats = analyseur.analyser(projetChoisi[0]);
 
-            // On passe la fenêtre principale ET les stats
-            ResultatsView.afficher(primaryStage, stats);
+            // Création de l'instance de ResultatsView
+            ResultatsView view = new ResultatsView();
+
+            // Appel de la méthode afficher sur l'instance
+            view.afficher(stats, primaryStage);
         });
 
         Scene scene = new Scene(root, 600, 250);

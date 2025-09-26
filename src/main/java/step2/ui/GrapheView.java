@@ -1,5 +1,6 @@
 package step2.ui;
 
+import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -12,8 +13,9 @@ import org.graphstream.ui.fx_viewer.FxViewer;
 import org.graphstream.ui.view.Viewer;
 import org.graphstream.ui.view.View;
 import step2.core.StatistiquesProjet;
+import javax.swing.JPanel;
 
-public class ResultatsView {
+public class GrapheView { // Note : Changé de ResultatsView à GrapheView
 
     public void afficher(StatistiquesProjet stats, Stage stage) {
         // Racine
@@ -36,13 +38,17 @@ public class ResultatsView {
         graph.addNode("B").setAttribute("ui.label", "B");
         graph.addEdge("AB", "A", "B");
 
-        // Création du viewer JavaFX
-        FxViewer viewer = new FxViewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        // Création du viewer
+        Viewer viewer = new FxViewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         viewer.enableAutoLayout();
-
-        // Ajouter la vue GraphStream directement au centre
         View view = viewer.addDefaultView(false);
-        root.setCenter((javafx.scene.Node) view); // Cast direct en Node
+
+        // Utiliser SwingNode pour intégrer la vue GraphStream
+        SwingNode swingNode = new SwingNode();
+        swingNode.setContent((JPanel) view); // Cast en JPanel pour Swing
+
+        // Ajouter le SwingNode au centre
+        root.setCenter(swingNode);
 
         // ----- Assemblage -----
         root.setLeft(statsBox);
